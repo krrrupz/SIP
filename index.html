@@ -1,255 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SIP Round-2 — Class 2 (300 Questions, input answers)</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SIP — Class 3 Questions</title>
 <style>
-  :root{
-    --accent:#0b63d5;
-    --muted:#666;
-    --good:#c9f1d0;
-    --bad:#ffd6d6;
-    --card:#ffffff;
-    --bg:#f3f8ff;
+:root{--accent:#0b63d5;--muted:#666;--good:#c9f1d0;--bad:#ffd6d6;--card:#fff;--bg:#f3f8ff;}
+body{font-family:Segoe UI,Arial,sans-serif;background:var(--bg);margin:0;padding:18px}
+header{display:flex;align-items:center;gap:12px;margin-bottom:15px}
+h1{margin:0;color:var(--accent);font-size:22px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+button{background:var(--accent);color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:bold}
+button.ghost{background:#fff;color:var(--accent);border:2px solid var(--accent)}
+#scoreBox{margin-left:auto;font-weight:bold;color:#083a8a}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.column{display:flex;flex-direction:column;gap:10px}
+.card{background:#fff;padding:10px;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.qnum{display:none}
+.qtext{font-size:16px}
+.ansBox{width:120px;padding:6px;font-size:15px}
+#resultsPanel{display:none;margin-top:18px;background:#fff;padding:12px;border-left:5px solid var(--accent);border-radius:8px;max-height:50vh;overflow:auto}
+.sol{padding:8px;border-radius:6px;margin-bottom:6px}
+.correct{background:var(--good)}
+.incorrect{background:var(--bad)}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+@media print{
+  .controls,
+  #scoreBox,
+  #resultsPanel,
+  footer,
+  header img{
+    display:none !important;
   }
-  html,body{height:100%;margin:0;}
+
   body{
-    font-family: "Segoe UI", Roboto, Arial, sans-serif;
-    background:var(--bg);
-    color:#111;
-    padding:18px;
-    box-sizing:border-box;
+    background:#fff;
+    margin:0;
+    padding:0;
   }
+
   header{
-    display:flex;
-    gap:12px;
-    align-items:center;
-    margin-bottom:14px;
+    margin-bottom:18px;
   }
-  header img{height:54px; width:54px; object-fit:contain; border-radius:8px; background:white; padding:6px;}
-  h1{font-size:20px;margin:0;color:var(--accent);}
-  .controls{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 18px;}
-  button{
-    background:var(--accent); color:white; border:0; padding:10px 14px;
-    border-radius:8px; cursor:pointer; font-weight:600;
-  }
-  button.ghost{background:transparent;color:var(--accent);border:2px solid var(--accent);}
-  #scoreBox{margin-left:8px; font-weight:700; color:#083a8a; align-self:center;}
-  main{display:block;}
+
   .grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:16px;
+    gap:12px;
   }
-  .column{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-  }
+
   .card{
-    background:var(--card);
-    border-radius:10px;
-    padding:10px;
-    box-shadow:0 1px 4px rgba(20,30,60,0.06);
+    box-shadow:none;
+    border:1px solid #bbb;
     break-inside:avoid;
+    page-break-inside:avoid;
   }
-  .qnum{
-    display:none; /* hide question numbers */
-  }
-  .qtext{
-    font-size:16px; 
-    display:inline-block; 
-    vertical-align:middle; 
-    margin-left:0; /* remove space for hidden numbers */
-  }
+
   .ansBox{
-    width:110px; padding:6px; font-size:15px; border-radius:6px; border:1px solid #ccc;
+    appearance:none;
+    -webkit-appearance:none;
+    border:1px solid #000;
+    background:#fff;
+    width:60px;
+    height:22px;
   }
-  #resultsPanel{margin-top:16px; padding:12px; background:white; border-left:5px solid var(--accent); border-radius:8px; display:none; max-height:50vh; overflow:auto;}
-  .solutions{margin-top:12px;}
-  .sol{padding:8px;border-radius:6px;margin-bottom:6px;}
-  .sol.correct{background:var(--good);}
-  .sol.incorrect{background:var(--bad);}
-  footer{margin-top:18px; font-size:13px; color:var(--muted);}
-  @media(max-width:900px){
-    .grid{grid-template-columns:1fr;}
-    header img{height:46px;width:46px;}
-  }
-  @media print {
-    button, header img, footer {display:none !important;}
-  }
+}
+
 </style>
 </head>
 <body>
 
 <header>
-  <img src="" alt="logo" id="logoPlaceholder">
-  <div>
-    <h1>SIP Round-2 — Class 2 (300 Questions)</h1>
-    <div style="font-size:13px;color:var(--muted)">Mixed arithmetic (Addition, Subtraction, Multiplication, Division)</div>
-  </div>
-  <div style="margin-left:auto;display:flex;align-items:center;">
-    <div id="scoreBox">Not yet attempted</div>
-  </div>
+<div>
+<h1>SIP Round - Class 3  Questions</h1>
+<div style="color:#666">Addition & Subtraction</div>
+</div>
+<div id="scoreBox">Not yet attempted</div>
 </header>
 
 <div class="controls">
-  <button id="btnCheck">Check Answers</button>
-  <button id="btnReset" class="ghost">New Set (Regenerate)</button>
-  <button id="btnShowSol" class="ghost">Show Solutions</button>
-  <button id="btnDownload" class="ghost">Print / Save as PDF</button>
+<label style="display:flex;align-items:center;font-weight:bold;">
+Questions:&nbsp;
+<select id="questionCount" style="padding:6px;border-radius:6px;">
+<option value="100">100</option>
+<option value="200">200</option>
+<option value="300" selected>300</option>
+</select>
+</label>
+<button id="btnCheck">Check Answers</button>
+<button id="btnReset" class="ghost">New Set</button>
+<button id="btnShow">Show Solutions</button>
+<button onclick="window.print()" class="ghost">Print / Save PDF</button>
 </div>
 
-<main id="mainArea">
-  <div class="grid" id="gridArea">
-    <div class="column" id="colLeft"></div>
-    <div class="column" id="colRight"></div>
-  </div>
+<div class="grid">
+<div class="column" id="left"></div>
+<div class="column" id="right"></div>
+</div>
 
-  <div id="resultsPanel">
-    <div id="summaryText"></div>
-    <div class="solutions" id="solutions"></div>
-  </div>
-</main>
-
-<footer>
-  Tip: Use the "New Set" button to regenerate a different combination. Hosted as a static page — works offline and on GitHub Pages.
-</footer>
+<div id="resultsPanel">
+<div id="summary"></div>
+<div id="solutions"></div>
+</div>
 
 <script>
-const TOTAL = 300;
-const RANGE_MIN = 1;
-const RANGE_MAX = 100;
-const OPS = ["+", "-", "×", "÷"];
+let TOTAL=300;
+const questionSelect=document.getElementById("questionCount");
 
-function randInt(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
+const OPS=["+","-"];
+let current=[];
+
+function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
 
 function genArithmetic(){
-  const op = OPS[randInt(0, OPS.length-1)];
-  let a,b,answer;
-  if(op === "+"){
-    a = randInt(RANGE_MIN, RANGE_MAX);
-    b = randInt(RANGE_MIN, RANGE_MAX);
-    answer = a + b;
-  } else if(op === "-"){
-    a = randInt(RANGE_MIN, RANGE_MAX);
-    b = randInt(RANGE_MIN, a);
-    answer = a - b;
-  } else if(op === "×"){
-    b = randInt(2,12);
-    a = randInt(2, Math.max(2, Math.floor(RANGE_MAX / b)));
-    answer = a * b;
-  } else { // division
-    b = randInt(2,12);
-    const maxMult = Math.max(1, Math.floor(RANGE_MAX / b));
-    const m = randInt(1, maxMult);
-    a = m * b;
-    answer = m;
-  }
-  return { text: `${a} ${op} ${b} =`, correct: answer };
-}
+ let op=OPS[rand(0,1)];
+ let a,b,answer;
 
-let currentSet = [];
+ if(op==="+"){
+    let t=rand(1,100);
 
-function buildSet(){
-  const arr = [];
-  for(let i=0;i<TOTAL;i++){
-    const q = genArithmetic();
-    arr.push({ id: i+1, qtext: q.text, correct: q.correct });
-  }
-  return arr;
-}
-
-function render(set){
-  const left = document.getElementById('colLeft');
-  const right = document.getElementById('colRight');
-  left.innerHTML = '';
-  right.innerHTML = '';
-
-  const fragLeft = document.createDocumentFragment();
-  const fragRight = document.createDocumentFragment();
-
-  for(let i=0;i<set.length;i++){
-    const item = set[i];
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div>
-        <span class="qnum">${item.id}.</span>
-        <span class="qtext">${item.qtext}</span>
-      </div>
-      <div style="margin-top:8px;">
-        <input type="number" inputmode="numeric" class="ansBox" id="ans-${item.id}" aria-label="Answer for question ${item.id}">
-      </div>
-    `;
-    if(i % 2 === 0) fragLeft.appendChild(card); else fragRight.appendChild(card);
-  }
-
-  left.appendChild(fragLeft);
-  right.appendChild(fragRight);
-}
-
-function checkAnswers(){
-  let score = 0;
-  const solDiv = document.getElementById('solutions');
-  solDiv.innerHTML = '';
-  for(const item of currentSet){
-    const inp = document.getElementById(`ans-${item.id}`);
-    const raw = inp ? inp.value.trim() : '';
-    let parsed = raw === '' ? null : Number(raw);
-    const sol = document.createElement('div');
-    sol.className = 'sol';
-    if(parsed !== null && !Number.isNaN(parsed) && Number(parsed) === Number(item.correct)){
-      score++;
-      sol.classList.add('correct');
-      sol.innerHTML = `<strong>Q${item.id}</strong> — Your answer: <strong>${parsed}</strong> — ✅ Correct`;
-    } else {
-      sol.classList.add('incorrect');
-      sol.innerHTML = `<strong>Q${item.id}</strong> — Your answer: <em>${raw || 'No answer'}</em> — ❌ Correct: <strong>${item.correct}</strong>`;
+    if(t<=20){
+        a=rand(10,99);
+        b=rand(10,99);
+    }else if(t<=60){
+        a=rand(100,999);
+        b=rand(10,99);
+    }else{
+        a=rand(100,999);
+        b=rand(100,999);
     }
-    solDiv.appendChild(sol);
-  }
-  document.getElementById('scoreBox').textContent = `Score: ${score} / ${TOTAL}`;
-  document.getElementById('summaryText').innerHTML = `<strong>Result:</strong> You scored <strong>${score}</strong> out of <strong>${TOTAL}</strong>.`;
-  document.getElementById('resultsPanel').style.display = 'block';
-  document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth' });
+
+    answer=a+b;
+ }else{
+
+    let t=rand(1,100);
+
+    if(t<=40){
+        a=rand(100,999);
+        b=rand(10,99);
+    }else{
+        a=rand(100,999);
+        b=rand(100,999);
+        if(b>a){let x=a;a=b;b=x;}
+    }
+
+    answer=a-b;
+ }
+
+ return {text:`${a} ${op} ${b} =`,correct:answer};
 }
 
-function showSolutionsOnly(){
-  const solDiv = document.getElementById('solutions');
-  solDiv.innerHTML = '';
-  for(const item of currentSet){
-    const sol = document.createElement('div');
-    sol.className = 'sol correct';
-    sol.innerHTML = `<strong>Q${item.id}:</strong> ${item.qtext} <strong>${item.correct}</strong>`;
-    solDiv.appendChild(sol);
-  }
-  document.getElementById('summaryText').innerHTML = `<strong>All solutions</strong>`;
-  document.getElementById('resultsPanel').style.display = 'block';
-  document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth' });
+function build(){
+ TOTAL=Number(questionSelect.value);
+ current=[];
+ for(let i=1;i<=TOTAL;i++){
+   let q=genArithmetic();
+   current.push({id:i,qtext:q.text,correct:q.correct});
+ }
+ render();
 }
 
-function regenerate(){
-  const anyFilled = Array.from(document.querySelectorAll('.ansBox')).some(i => i.value.trim() !== '');
-  if(anyFilled){
-    if(!confirm('Generate a new random set? Current answers will be lost.')) return;
-  }
-  currentSet = buildSet();
-  render(currentSet);
-  document.getElementById('resultsPanel').style.display = 'none';
-  document.getElementById('scoreBox').textContent = `Not yet attempted`;
-  window.scrollTo({ top: 0, behavior: 'instant' });
+function render(){
+ left.innerHTML="";
+ right.innerHTML="";
+ current.forEach((q,i)=>{
+   let c=document.createElement("div");
+   c.className="card";
+   c.innerHTML=`<div><span class="qtext">${q.qtext}</span></div>
+   <div style="margin-top:8px">
+   <input type="number" class="ansBox" id="ans-${q.id}">
+   </div>`;
+   (i%2==0?left:right).appendChild(c);
+ });
+ document.getElementById("resultsPanel").style.display="none";
+ document.getElementById("scoreBox").textContent="Not yet attempted";
 }
 
-function printPage(){ window.print(); }
+function check(){
+ let score=0;
+ solutions.innerHTML="";
+ current.forEach(q=>{
+   let val=document.getElementById("ans-"+q.id).value.trim();
+   let n=(val==="")?null:Number(val);
+   let d=document.createElement("div");
+   if(n!==null && !Number.isNaN(n) && n===q.correct){
+      score++;
+      d.className="sol correct";
+      d.innerHTML=`<b>Q${q.id}</b> ✓ Your answer: <b>${n}</b>`;
+   }else{
+      d.className="sol incorrect";
+      d.innerHTML=`<b>Q${q.id}</b> ✗ Your answer: ${val||"No answer"} | Correct: <b>${q.correct}</b>`;
+   }
+   solutions.appendChild(d);
+ });
+ scoreBox.textContent=`Score: ${score} / ${TOTAL}`;
+ summary.innerHTML=`<b>Result:</b> ${score} / ${TOTAL}`;
+ resultsPanel.style.display="block";
+}
 
-document.getElementById('btnCheck').addEventListener('click', checkAnswers);
-document.getElementById('btnReset').addEventListener('click', regenerate);
-document.getElementById('btnShowSol').addEventListener('click', showSolutionsOnly);
-document.getElementById('btnDownload').addEventListener('click', printPage);
+function showSolutions(){
+ solutions.innerHTML="";
+ current.forEach(q=>{
+   let d=document.createElement("div");
+   d.className="sol correct";
+   d.innerHTML=`<b>Q${q.id}</b> ${q.qtext} <b>${q.correct}</b>`;
+   solutions.appendChild(d);
+ });
+ summary.innerHTML="<b>All Solutions</b>";
+ resultsPanel.style.display="block";
+}
 
-regenerate();
+btnCheck.onclick=check;
+btnShow.onclick=showSolutions;
+btnReset.onclick=()=>{
+ if([...document.querySelectorAll(".ansBox")].some(x=>x.value.trim()!=="")){
+   if(!confirm("Generate a new set?")) return;
+ }
+ 
+questionSelect.onchange=()=>build();
+build();
+};
+
+build();
 </script>
 </body>
 </html>
